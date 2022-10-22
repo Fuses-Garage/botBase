@@ -2,10 +2,8 @@ const { exec } = require('child_process')//再起動に必要だよ
 const token = process.env['BOTTOKEN']//トークンを取得するよ
 const keepAlive = require("./server.js")//24時間稼働に必要だよ
 const log = require("./login.js")//24時間稼働に必要だよ
-const { Client, GatewayIntentBits, SharedSlashCommandOptions, Guild, inlineCode } = require("discord.js");//discord.jsを読み込むよ
-const client = new Client({
-	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
-});//クライアントを生成するよ
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [32767] });
 if(token!=null){//トークンが設定されてたら
 
 	(async () => { // ログイン処理を行うよ
@@ -15,8 +13,11 @@ if(token!=null){//トークンが設定されてたら
 	    	});
 	})()
 } 
-client.once('ready', () => {//ログイン出来たら
+ client.once('ready', async () => {//ログイン出来たら
 	console.log('Ready!');//コンソールにメッセージ
 	client.user.setActivity('!edumaid')//アクティビティを設定するよ
+	
+    
+    console.log("Ready!");
 });
 keepAlive();//webサーバーを建てるよ
