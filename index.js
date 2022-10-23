@@ -2,7 +2,8 @@ const { exec } = require('child_process')//再起動に必要だよ
 const token = process.env['BOTTOKEN']//トークンを取得するよ
 const keepAlive = require("./server.js")//24時間稼働に必要だよ
 const log = require("./login.js")//24時間稼働に必要だよ
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, Events } = require('discord.js');
+const Discord = require("discord.js");
 const client = new Client({ intents: [32767] });
 if(token!=null){//トークンが設定されてたら
 
@@ -16,8 +17,15 @@ if(token!=null){//トークンが設定されてたら
  client.once('ready', async () => {//ログイン出来たら
 	console.log('Ready!');//コンソールにメッセージ
 	client.user.setActivity('!edumaid')//アクティビティを設定するよ
-	
-    
-    console.log("Ready!");
+	const dep=require("./deploy.js")
+	const gs = client.guilds.cache
+	const date = new Date()
+	gs.forEach(async function(g) {
+		dep(g.id.toString())
+	});
+ })
+client.on(Events.InteractionCreate, async interaction => {
+	const cc=require("./commandcall.js")
+	cc(interaction)
 });
 keepAlive();//webサーバーを建てるよ
